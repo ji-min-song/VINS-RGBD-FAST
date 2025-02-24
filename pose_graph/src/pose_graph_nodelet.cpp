@@ -390,7 +390,7 @@ private:
 
     visualization_msgs::Marker key_odometrys;
     key_odometrys.header = pose_msg->header;
-    key_odometrys.header.frame_id = "vins_map";
+    key_odometrys.header.frame_id = "odom";
     key_odometrys.ns = "key_odometrys";
     key_odometrys.type = visualization_msgs::Marker::SPHERE_LIST;
     key_odometrys.action = visualization_msgs::Marker::ADD;
@@ -422,12 +422,12 @@ private:
     if (!LOOP_CLOSURE) {
       geometry_msgs::PoseStamped pose_stamped;
       pose_stamped.header = pose_msg->header;
-      pose_stamped.header.frame_id = "vins_map";
+      pose_stamped.header.frame_id = "odom";
       pose_stamped.pose.position.x = vio_t.x();
       pose_stamped.pose.position.y = vio_t.y();
       pose_stamped.pose.position.z = vio_t.z();
       no_loop_path.header = pose_msg->header;
-      no_loop_path.header.frame_id = "vins_map";
+      no_loop_path.header.frame_id = "odom";
       no_loop_path.poses.push_back(pose_stamped);
       pub_vio_path.publish(no_loop_path);
     }
