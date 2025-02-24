@@ -539,7 +539,7 @@ private:
             estimator.processImage(feature_msg.second, feature_msg.first.first);
 
             std_msgs::Header header = feature_msg.first.first;
-            header.frame_id         = "map";
+            header.frame_id         = "vins_map";
             pubOdometry(estimator, header);
             pubTF(estimator, header);
             pubKeyframe(estimator);

@@ -68,7 +68,7 @@ void pubLatestOdometry(const Eigen::Vector3d &P, const Eigen::Quaterniond &Q,
 {
     nav_msgs::Odometry odometry;
     odometry.header.stamp            = ros::Time(t);
-    odometry.header.frame_id         = "map";
+    odometry.header.frame_id         = "vins_map";
     odometry.pose.pose.position.x    = P.x();
     odometry.pose.pose.position.y    = P.y();
     odometry.pose.pose.position.z    = P.z();
@@ -148,8 +148,8 @@ void pubOdometry(const Estimator &estimator, const std_msgs::Header &header)
     {
         nav_msgs::Odometry odometry;
         odometry.header          = header;
-        odometry.header.frame_id = "map";
-        odometry.child_frame_id  = "map";
+        odometry.header.frame_id = "vins_map";
+        odometry.child_frame_id  = "vins_map";
         Quaterniond tmp_Q;
         tmp_Q                            = Quaterniond(estimator.Rs[WINDOW_SIZE]);
         odometry.pose.pose.position.x    = estimator.Ps[WINDOW_SIZE].x();
@@ -182,10 +182,10 @@ void pubOdometry(const Estimator &estimator, const std_msgs::Header &header)
 
         geometry_msgs::PoseStamped pose_stamped;
         pose_stamped.header          = header;
-        pose_stamped.header.frame_id = "map";
+        pose_stamped.header.frame_id = "vins_map";
         pose_stamped.pose            = odometry.pose.pose;
         path.header                  = header;
-        path.header.frame_id         = "map";
+        path.header.frame_id         = "vins_map";
         path.poses.push_back(pose_stamped);
         //"path"
         pub_path.publish(path);
@@ -206,7 +206,7 @@ void pubOdometry(const Estimator &estimator, const std_msgs::Header &header)
 
         pose_stamped.pose         = odometry.pose.pose;
         relo_path.header          = header;
-        relo_path.header.frame_id = "map";
+        relo_path.header.frame_id = "vins_map";
         relo_path.poses.push_back(pose_stamped);
         //"relocalization_path"
         pub_relo_path.publish(relo_path);
@@ -232,7 +232,7 @@ void pubKeyPoses(const Estimator &estimator, const std_msgs::Header &header)
         return;
     visualization_msgs::Marker key_poses;
     key_poses.header             = header;
-    key_poses.header.frame_id    = "map";
+    key_poses.header.frame_id    = "vins_map";
     key_poses.ns                 = "key_poses";
     key_poses.type               = visualization_msgs::Marker::SPHERE_LIST;
     key_poses.action             = visualization_msgs::Marker::ADD;
@@ -273,7 +273,7 @@ void pubCameraPose(const Estimator &estimator, const std_msgs::Header &header)
 
         geometry_msgs::PoseStamped pose_stamped;
         pose_stamped.header          = header;
-        pose_stamped.header.frame_id = "map";
+        pose_stamped.header.frame_id = "vins_map";
         pose_stamped.pose.position.x = P.x();
         pose_stamped.pose.position.y = P.y();
         pose_stamped.pose.position.z = P.z();
@@ -312,7 +312,7 @@ void pubIMUPose(const Estimator &estimator, const std_msgs::Header &header)
 
         geometry_msgs::PoseStamped pose_stamped;
         pose_stamped.header             = header;
-        pose_stamped.header.frame_id    = "map";
+        pose_stamped.header.frame_id    = "vins_map";
         pose_stamped.pose.position.x    = P.x();
         pose_stamped.pose.position.y    = P.y();
         pose_stamped.pose.position.z    = P.z();
@@ -425,7 +425,7 @@ void pubTF(const Estimator &estimator, const std_msgs::Header &header)
     q.setY(correct_q.y());
     q.setZ(correct_q.z());
     transform.setRotation(q);
-    br.sendTransform(tf::StampedTransform(transform, header.stamp, "map", "body"));
+    br.sendTransform(tf::StampedTransform(transform, header.stamp, "vins_map", "body"));
 
     // camera frame
     transform.setOrigin(
@@ -439,7 +439,7 @@ void pubTF(const Estimator &estimator, const std_msgs::Header &header)
 
     nav_msgs::Odometry odometry;
     odometry.header               = header;
-    odometry.header.frame_id      = "map";
+    odometry.header.frame_id      = "vins_map";
     odometry.pose.pose.position.x = estimator.tic[0].x();
     odometry.pose.pose.position.y = estimator.tic[0].y();
     odometry.pose.pose.position.z = estimator.tic[0].z();
@@ -464,7 +464,7 @@ void pubKeyframe(const Estimator &estimator)
 
         nav_msgs::Odometry odometry;
         odometry.header.stamp            = ros::Time(estimator.Headers[WINDOW_SIZE - 2]);
-        odometry.header.frame_id         = "map";
+        odometry.header.frame_id         = "vins_map";
         odometry.pose.pose.position.x    = P.x();
         odometry.pose.pose.position.y    = P.y();
         odometry.pose.pose.position.z    = P.z();
@@ -523,7 +523,7 @@ void pubRelocalization(const Estimator &estimator)
 {
     nav_msgs::Odometry odometry;
     odometry.header.stamp            = ros::Time(estimator.relo_frame_stamp);
-    odometry.header.frame_id         = "map";
+    odometry.header.frame_id         = "vins_map";
     odometry.pose.pose.position.x    = estimator.relo_relative_t.x();
     odometry.pose.pose.position.y    = estimator.relo_relative_t.y();
     odometry.pose.pose.position.z    = estimator.relo_relative_t.z();
